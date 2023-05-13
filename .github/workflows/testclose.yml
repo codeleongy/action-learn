@@ -1,0 +1,26 @@
+name: Close CI
+run-name: ${{ github.actor }} is running out GitHub Actions 🚀
+on: 
+  pull_request:
+    types: [ closed ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Step 1
+      run: echo "This is step 1"
+    - name: Step 2
+      run: |
+        echo "This is step 2"
+        exit 1
+      id: step2
+    - name: Step 3
+      run: echo "This is step 3"
+    - name: Mark build as failed
+      if: failure()
+      run: |
+        echo "::set-output name=build_result::failed"
+    - name: Show build summary
+      if: always()
+      run: |
+        echo "Build result: ${{ steps.mark_build_status.outputs.build_result }}"
